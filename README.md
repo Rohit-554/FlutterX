@@ -18,8 +18,6 @@ https://github.com/user-attachments/assets/08d5edb7-6032-4f08-90b5-ecf7dbf8e54b
 - Google Earth is currently unable to render all the data points effectively and only displays information for few states.
 
 
-This version is more concise and professional while retaining the original meaning. Let me know if you need further adjustments!
-
 <div style="display: flex; gap: 10px;">
   <img 
     src="https://github.com/user-attachments/assets/71376adb-5ba6-4d60-a1f8-f17dca6f0b3d" 
