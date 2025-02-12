@@ -4,7 +4,7 @@ A respository for testing flutter UIs and experimenting various new featuers
 
 <br>
 
-# Outputs (v0.1)
+# Outputs ([v0.1](https://github.com/Rohit-554/FlutterX/releases/tag/0.1))
 
 ### Mobile
 
