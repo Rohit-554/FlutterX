@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'AnimatedNavBar.dart';
+import 'AnimatingShapes.dart';
 import 'GlowingVoiceUI.dart';
 import 'MorphableSides.dart';
 import 'ProgressBar.dart';
@@ -83,7 +84,7 @@ class _TabIndicatorExampleState extends State<TabIndicatorExample> {
                   index: _currentIndex,
                   children:  [
                     VoiceAssistantApp(),
-                    MorphableSides(),
+                    MorphingShapesScreen(),
                     ProgressCheckBoxes(),
                     AnimatedNavBar(),
                   ],
