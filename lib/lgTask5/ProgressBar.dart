@@ -14,6 +14,7 @@ class _ProgressStepperState extends State<ProgressCheckBoxes>
   late Animation<double> _scaleAnimation;
 
   final List<String> steps = ['Lets', 'Do', 'Something', 'Crazyy'];
+  bool inProgress = true;
 
   @override
   void initState() {
@@ -41,6 +42,17 @@ class _ProgressStepperState extends State<ProgressCheckBoxes>
     if (currentStep < steps.length - 1) {
       setState(() {
         currentStep++;
+        inProgress = currentStep == 0 ? true : currentStep < steps.length - 1;
+      });
+      _scaleController.forward();
+    }
+  }
+
+  void previousStep() {
+    if (currentStep > 0) {
+      setState(() {
+        currentStep--;
+        inProgress = currentStep == 0 ? true : currentStep < steps.length - 1;
       });
       _scaleController.forward();
     }
@@ -49,8 +61,25 @@ class _ProgressStepperState extends State<ProgressCheckBoxes>
   void resetSteps() {
     setState(() {
       currentStep = 0;
+      inProgress = true;
     });
     _scaleController.forward();
+  }
+
+  String _getStepText(int index) {
+    if (index < currentStep) {
+      return 'Completed';
+    } else if (index == currentStep) {
+      if (index == 0 && inProgress) {
+        return 'In Progress';
+      } else if (index == currentStep && inProgress) {
+        return 'In Progress';
+      } else {
+        return 'Completed';
+      }
+    } else {
+      return 'Pending';
+    }
   }
 
   @override
@@ -78,18 +107,18 @@ class _ProgressStepperState extends State<ProgressCheckBoxes>
                               child: index == 0
                                   ? const SizedBox()
                                   : Divider(
-                                      color: isCompleted
-                                          ? Colors.blue
-                                          : Colors.grey[300],
-                                      thickness: 2,
-                                    ),
+                                color: isCompleted
+                                    ? Colors.blue
+                                    : Colors.grey[300],
+                                thickness: 2,
+                              ),
                             ),
                             AnimatedBuilder(
                               animation: _scaleAnimation,
                               builder: (context, child) {
                                 return Transform.scale(
                                   scale:
-                                      isCurrent ? _scaleAnimation.value : 1.0,
+                                  isCurrent ? _scaleAnimation.value : 1.0,
                                   child: Container(
                                     width: 30,
                                     height: 30,
@@ -112,17 +141,17 @@ class _ProgressStepperState extends State<ProgressCheckBoxes>
                               child: index == steps.length - 1
                                   ? const SizedBox()
                                   : Divider(
-                                      color: isCompleted
-                                          ? Colors.blue
-                                          : Colors.grey[300],
-                                      thickness: 2,
-                                    ),
+                                color: isCompleted
+                                    ? Colors.blue
+                                    : Colors.grey[300],
+                                thickness: 2,
+                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          steps[index],
+                          _getStepText(index),
                           style: TextStyle(
                             color: isCompleted ? Colors.blue : Colors.grey[300],
                             fontSize: 12,
@@ -136,10 +165,21 @@ class _ProgressStepperState extends State<ProgressCheckBoxes>
             ),
             const SizedBox(height: 20),
             if (currentStep < steps.length - 1)
-              ElevatedButton(
-                onPressed: nextStep,
-                child: Text('Next Step'),
-              )
+              Row( 
+                 mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: previousStep ,
+                        child: Text("Previous Step")
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: nextStep,
+                      child: Text('Next Step'),
+                    ),
+                  ],
+               )
+
             else
               ElevatedButton(
                 onPressed: resetSteps,

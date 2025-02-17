@@ -54,9 +54,9 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, AnimateIcons.home, 'Home'),
+                _buildNavItem(0, AnimateIcons.compass, 'Explore'),
+                _buildNavItem(2, AnimateIcons.playStop, 'Reels'),
                 _buildNavItem(1, AnimateIcons.bell, 'Notifications'),
-                _buildNavItem(2, AnimateIcons.activity, 'You'),
               ],
             ),
           ),
@@ -77,7 +77,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
             _onItemTapped(index);
           },
           iconType: IconType.animatedOnTap,
-          color: isSelected ? Colors.blue : Colors.white,
+          color: isSelected ? Colors.white : Colors.grey,
           animateIcon: iconData,
         ),
         const SizedBox(height: 4),

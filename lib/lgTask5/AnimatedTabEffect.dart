@@ -30,105 +30,96 @@ class TabIndicatorExample extends StatefulWidget {
 }
 
 class _TabIndicatorExampleState extends State<TabIndicatorExample> {
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
+
+  final List<String> _labels = ["Task 1", "Task 2", "Task 5", "Task 6"];
+  final List<IconData> _icons = [Icons.task, Icons.task, Icons.task, Icons.task];
 
   void _selectTab(int index) {
     setState(() {
       _currentIndex = index;
     });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Center(child: Text('Lets Do this!')),
-
+        title: const Center(child: Text('Let\'s Do This!')),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Center(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildTab(
-                    icon: Icons.task,
-                    label: 'Task 1',
-                    isSelected: _currentIndex == 0,
-                    onTap: () => _selectTab(0),
-                  ),
-                  _buildTab(
-                    icon: Icons.task,
-                    label: 'Task 2',
-                    isSelected: _currentIndex == 1,
-                    onTap: () => _selectTab(1),
-                  ),
-                  _buildTab(
-                    icon: Icons.task,
-                    label: 'Task 5',
-                    isSelected: _currentIndex == 2,
-                    onTap: () => _selectTab(2),
-                  ),
-                  _buildTab(
-                    icon: Icons.task,
-                    label: 'Task 6',
-                    isSelected: _currentIndex == 3,
-                    onTap: () => _selectTab(3),
-                  )
-                ],
-              ),
-              Expanded(
-                child: IndexedStack(
-                  index: _currentIndex,
-                  children:  [
-                    VoiceAssistantApp(),
-                    MorphingShapesScreen(),
-                    ProgressCheckBoxes(),
-                    AnimatedNavBar(),
-                  ],
-                ),
-              ),
-            ],
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          _buildTabBar(),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              children: [
+                VoiceAssistantApp(),
+                MorphingShapesScreen(),
+                ProgressCheckBoxes(),
+                AnimatedNavBar(),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildTab({
-    required IconData icon,
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? Colors.blue : Colors.grey,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Colors.blue : Colors.grey,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+  Widget _buildTabBar() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: List.generate(_labels.length, (index) {
+            return GestureDetector(
+              onTap: () => _selectTab(index),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _icons[index],
+                    color: _currentIndex == index ? Colors.blue : Colors.grey,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _labels[index],
+                    style: TextStyle(
+                      color: _currentIndex == index ? Colors.blue : Colors.grey,
+                      fontWeight: _currentIndex == index ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
+        const SizedBox(height: 8),
+        Stack(
+          children: [
+            Container(height: 2, color: Colors.grey[300]),
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              left: _currentIndex * (MediaQuery.of(context).size.width / _labels.length),
+              width: MediaQuery.of(context).size.width / _labels.length,
+              height: 2,
+              child: Container(color: Colors.blue),
             ),
-          ),
-          const SizedBox(height: 4),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            width: isSelected ? 80 : 0,
-            height: 2,
-            color: Colors.blue,
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 }
