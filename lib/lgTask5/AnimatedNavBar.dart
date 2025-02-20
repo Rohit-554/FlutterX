@@ -21,14 +21,18 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
     _controllers = List.generate(
       3,
           (index) => AnimationController(
-        duration: const Duration(milliseconds: 600),
+        duration: const Duration(milliseconds: 800),
         vsync: this,
+        animationBehavior: AnimationBehavior.preserve,
       ),
     );
 
     _animations = _controllers
         .map((controller) =>
-        Tween<double>(begin: 0.0, end: 1.0).animate(controller))
+        CurvedAnimation(
+          parent: Tween<double>(begin: 0.0, end: 1.0).animate(controller),
+          curve: Curves.easeInOut,
+        ))
         .toList();
   }
 
@@ -44,7 +48,19 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
     setState(() {
       selectedIndex = index;
     });
-    _controllers[index].forward().then((_) => _controllers[index].reverse());
+
+    for (var controller in _controllers) {
+      if (controller.isAnimating) {
+        controller.reset();
+      }
+    }
+
+    _controllers[index].forward().then((_) =>
+        Future.delayed(
+          const Duration(milliseconds: 100),
+              () => _controllers[index].reverse(),
+        )
+    );
   }
 
   @override
