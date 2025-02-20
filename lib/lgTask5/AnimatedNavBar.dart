@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animated_icon/animated_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 
 class AnimatedNavBar extends StatefulWidget {
   @override
@@ -9,24 +10,33 @@ class AnimatedNavBar extends StatefulWidget {
 }
 
 class _AnimatedNavBarState extends State<AnimatedNavBar>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   int selectedIndex = 0;
-  late AnimationController _controller;
-  late Animation<double> _animation;
+  late List<AnimationController> _controllers;
+  late List<Animation<double>> _animations;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
+    _controllers = List.generate(
+      3,
+          (index) => AnimationController(
+        duration: const Duration(milliseconds: 600),
+        vsync: this,
+      ),
     );
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+
+    _animations = _controllers
+        .map((controller) =>
+        Tween<double>(begin: 0.0, end: 1.0).animate(controller))
+        .toList();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -34,8 +44,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
     setState(() {
       selectedIndex = index;
     });
-    // Play the animation forward and then reverse on tap
-    _controller.forward().then((_) => _controller.reverse());
+    _controllers[index].forward().then((_) => _controllers[index].reverse());
   }
 
   @override
@@ -70,7 +79,7 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
         children: [
           AnimatedIcon(
             icon: iconData,
-            progress: _animation,
+            progress: _animations[index],
             size: 30,
             color: isSelected ? Colors.blue : Colors.grey,
           ),
