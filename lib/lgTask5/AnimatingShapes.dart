@@ -438,7 +438,7 @@ class _MorphingShapesScreenState extends State<MorphingShapesScreen>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 20),
       vsync: this,
     )..addStatusListener((status) {
       if (status == AnimationStatus.completed) {

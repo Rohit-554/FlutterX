@@ -18,16 +18,10 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 1.0, end: 1.3)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut))
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _controller.reverse();
-        }
-      });
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
   }
 
   @override
@@ -40,7 +34,8 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
     setState(() {
       selectedIndex = index;
     });
-    _controller.forward();
+    // Play the animation forward and then reverse on tap
+    _controller.forward().then((_) => _controller.reverse());
   }
 
   @override
@@ -54,9 +49,9 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, AnimateIcons.compass, 'Explore'),
-                _buildNavItem(2, AnimateIcons.playStop, 'Reels'),
-                _buildNavItem(1, AnimateIcons.bell, 'Notifications'),
+                _buildNavItem(0, AnimatedIcons.home_menu, 'Home'),
+                _buildNavItem(1, AnimatedIcons.play_pause, 'Reels'),
+                _buildNavItem(2, AnimatedIcons.view_list, 'Feed'),
               ],
             ),
           ),
@@ -65,30 +60,30 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
     );
   }
 
-  Widget _buildNavItem(int index, iconData  , String label) {
+  Widget _buildNavItem(int index, AnimatedIconData iconData, String label) {
     bool isSelected = selectedIndex == index;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AnimateIcon(
-          key: ValueKey(index),
-          onTap: () {
-            _onItemTapped(index);
-          },
-          iconType: IconType.animatedOnTap,
-          color: isSelected ? Colors.white : Colors.grey,
-          animateIcon: iconData,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.blue : Colors.white,
-            fontSize: 12,
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedIcon(
+            icon: iconData,
+            progress: _animation,
+            size: 30,
+            color: isSelected ? Colors.blue : Colors.grey,
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.blue : Colors.white,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
