@@ -122,12 +122,12 @@ final starShape = StarShapeBorder(
 
 final circleShape = CircleShapeBorder();
 
-//gemini rectangle shape
+//Iteration3 rectangle shape
 final rectangleShape = RectangleShapeBorder(
     borderRadius:
         DynamicBorderRadius.all(DynamicRadius.circular(76.toPXLength)));
 
-//gemini polygon shape
+//Iteration3 polygon shape
 final polygonshape = PolygonShapeBorder(
   sides: 6,
   cornerStyle: CornerStyle.rounded,

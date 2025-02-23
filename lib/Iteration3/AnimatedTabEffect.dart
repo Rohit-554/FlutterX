@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ui_exps/Iteration3/GeminiAnimation.dart';
 
-import 'AnimatedNavBar.dart';
-import 'AnimatingShapes.dart';
-import 'GlowingVoiceUI.dart';
-import 'MorphableSides.dart';
-import 'ProgressBar.dart';
+import 'AnimatedIcons.dart';
+import 'GoogleVoiceUI.dart';
+import '../lgTask5/AnimatedNavBar.dart';
+import '../lgTask5/AnimatingShapes.dart';
+import '../lgTask5/GlowingVoiceUI.dart';
+import '../lgTask5/MorphableSides.dart';
+import '../lgTask5/ProgressBar.dart';
 
 
 class AnimatedTabEffect extends StatelessWidget {
@@ -66,10 +69,10 @@ class _TabIndicatorExampleState extends State<TabIndicatorExample> {
                 });
               },
               children: [
-                VoiceAssistantApp(),
-                MorphingShapesScreen(),
+                GlowingVoiceUI(),
+                GeminiAnimation(),
                 ProgressCheckBoxes(),
-                AnimatedNavBar(),
+                AnimatedNavBarIcons(),
               ],
             ),
           ),
