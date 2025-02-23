@@ -474,25 +474,36 @@ class _MorphingShapesScreenState extends State<MorphingShapesScreen>
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
-            return Transform.rotate(
-              angle: _rotationAnimation.value,
-              child: ClipPath(
-                clipper: _shapeClippers[_currentShapeIndex],
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.purple, // Start with purple
-                        Colors.blueAccent, // End with blue
-                      ],
-                      begin: Alignment.topLeft, // Gradient starts at top-left
-                      end: Alignment.bottomRight, // Gradient ends at bottom-right
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Transform.rotate(
+                  angle: _rotationAnimation.value,
+                  child: ClipPath(
+                    clipper: _shapeClippers[_currentShapeIndex],
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.purple,
+                            Colors.blueAccent,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                Image.asset(
+                  'assets/star.png',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.contain,
+                ),
+              ],
             );
           },
         ),
